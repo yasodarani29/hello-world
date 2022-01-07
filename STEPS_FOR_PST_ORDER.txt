@@ -1,0 +1,183 @@
+GET: Order Init
+{{host}}/api/widget/v3/channel/{{channelId}}/order/init
+
+Req Body: not required
+
+REsponse: You will get caasOrderId
+
+==========
+POST: productConfigurations/configId
+{{host}}/api/widget/v3/channel/{{channelId}}/productconfigurations/12340
+
+Req :
+{
+      "product": {
+        "configId": "12340",
+        "salesProduct": {
+          "productId": 102100001,
+          "quantity": 2
+        }
+      },
+      "configuration": {
+        "productFulfillerType": "none",
+        "productFulfillerDetails": {
+          "fulfillmentId": "abc",
+		  "trackingId": "123",
+		  "fulfillmentResult": "asdfasdfasdf"
+        }
+      }
+    }
+	
+===========
+PUT: orders/orderId
+
+Req:
+{       
+ "products": [
+    {
+        "configId": "12340",
+        "salesProduct": {
+          "productId": 102100001,
+          "quantity": 3
+        }
+    }
+  ],
+  "email": "smitha_bhanoori@infosys.com",
+  "noInvoiceRequired": true,
+  "legal": {
+      "termsOfTradeAccepted": true    
+   },
+  "payment": {
+    "paymentType": "zvt"
+  },
+  "deviceInformation": {
+    "osType": "android",
+    "osVersion": "0815",
+    "deviceId": "a1b2c3d4e5"
+  } 
+}
+
+===========
+POST: {{host}}/api/testautomation/v1/signZVT
+
+Req: 
+{  
+    "caasOrderId": "e6b7d29d-0a5d-489a-56f9-371becaca7ac",
+    "podId": "8888123",
+    "terminalId": "0815",
+    "transactionId": "9tjoi4e58934u8z34hg78934",
+    "amount": 960,
+    "timestamp": "2021-10-01T08:44:23Z"
+}
+
+Response:
+{
+    "amount": 960,
+    "signature": "iXEyKYGA6wrJCQuUfPCFoDbhgdkoxjn2kes4vX1-tqeFfbE_g51uNt8jfl6Va4vojbxw9sevCSkH8vSxlV-JMSI5oEtZuGLkA5C4MHpQPscTWvQb2tv2RiiM6qBH_AkOIEXTIKnzZ0AFn8P7ZlxXrVf8cJIXjCRHuI63k5KSVLDb6nYmnEXFraTPTiZIN8JaT9wTmXavdIhqjHUX_TAOgaZeJhWoJbCROwNdhpOK_tTWkywUDFv9cVe5S5Y1rUP16oIDEA9rfdjhvrhPsoTZxgUhl9sKA7sIvPo88JFSB_CpJMC3QbzS1B7HAisOabad6BU0fR6cAzG0Hf-7xJxiqg==",
+    "caasOrderId": "e6b7d29d-0a5d-489a-56f9-371becaca7ac",
+    "terminalId": "0815",
+    "podId": "8888123",
+    "transactionId": "9tjoi4e58934u8z34hg78934",
+    "timestamp": "2021-10-01T08:44:23Z"
+}
+
+==============
+POST: finalize
+
+Req: 
+{
+  "paymentType": "zvt",
+  "paymentDetails": {
+    "podId": "8888123",
+    "terminalId": "0815",
+    "transactionId": "9tjoi4e58934u8z34hg78934",
+    "amount": 960,
+    "timestamp": "2021-10-01T08:44:23Z",
+    "signature": "iXEyKYGA6wrJCQuUfPCFoDbhgdkoxjn2kes4vX1-tqeFfbE_g51uNt8jfl6Va4vojbxw9sevCSkH8vSxlV-JMSI5oEtZuGLkA5C4MHpQPscTWvQb2tv2RiiM6qBH_AkOIEXTIKnzZ0AFn8P7ZlxXrVf8cJIXjCRHuI63k5KSVLDb6nYmnEXFraTPTiZIN8JaT9wTmXavdIhqjHUX_TAOgaZeJhWoJbCROwNdhpOK_tTWkywUDFv9cVe5S5Y1rUP16oIDEA9rfdjhvrhPsoTZxgUhl9sKA7sIvPo88JFSB_CpJMC3QbzS1B7HAisOabad6BU0fR6cAzG0Hf-7xJxiqg=="
+  }
+}
+
+Response:
+ order details like shopOrderId
+ 
+===============================
+
+
+Bundle products example:
+
+POST: {{host}}/api/widget/v3/channel/{{channelId}}/productconfigurations
+
+{
+  "products": [
+    {
+      "product": {
+        "configId": "12343",
+        "salesProduct": {
+          "productId": 102100001,
+          "quantity": 3
+        }
+      },
+      "configuration": {
+        "productFulfillerType": "none",
+        "productFulfillerDetails": {
+          "fulfillmentId": "abc",
+		  "trackingId": "123",
+		  "fulfillmentResult": "asdfasdfasdf"
+        }
+      }
+    },
+    {
+      "product": {
+        "configId": "12342",
+        "bundleReferenceConfigId": "12343",
+        "salesProduct": {
+          "productId": 1067,
+          "quantity": 3
+        }
+      },
+      "configuration": {
+        "productFulfillerType": "none",
+        "productFulfillerDetails": {
+          "fulfillmentId": "abc",
+		  "trackingId": "123",
+		  "fulfillmentResult": "asdfasdfasdf"
+        }
+      }
+    }
+  ]
+}
+
+=============
+PUT: order for bundle products
+
+{       
+ "products": [
+    {
+        "configId": "12343",
+        "salesProduct": {
+          "productId": 102100001,
+          "quantity": 3
+        }
+    },
+    {
+        "configId": "12342",
+        "salesProduct": {
+          "productId": 1013,
+          "quantity": 3
+        }   
+    }
+  ],
+  "email": "smitha_bhanoori@infosys.com",
+  "noInvoiceRequired": true,
+  "legal": {
+      "termsOfTradeAccepted": true    
+   },
+  "payment": {
+    "paymentType": "zvt"
+  },
+  "deviceInformation": {
+    "osType": "android",
+    "osVersion": "0815",
+    "deviceId": "a1b2c3d4e5"
+  } 
+}
